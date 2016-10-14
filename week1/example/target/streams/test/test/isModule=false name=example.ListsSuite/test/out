@@ -1,0 +1,14 @@
+[0m[[0minfo[0m] [0m[32mListsSuite:[0m[0m
+[0m[[0minfo[0m] [0m[32m- one plus one is two[0m[0m
+[0m[[0minfo[0m] [0m[32m- one plus one is three?[0m[0m
+[0m[[0minfo[0m] [0m[31m- details why one plus one is not three *** FAILED ***[0m[0m
+[0m[[0minfo[0m] [0m[31m  2 did not equal 3 (ListsSuite.scala:75)[0m[0m
+[0m[[0minfo[0m] [0m[32m- intNotZero throws an exception if its argument is 0[0m[0m
+[0m[[0minfo[0m] [0m[32m- sum of a few numbers[0m[0m
+[0m[[0minfo[0m] [0m[32m- sum of negatives[0m[0m
+[0m[[0minfo[0m] [0m[32m- sum of empty list[0m[0m
+[0m[[0minfo[0m] [0m[32m- max throws error on empty list[0m[0m
+[0m[[0minfo[0m] [0m[32m- max of a few numbers[0m[0m
+[0m[[0minfo[0m] [0m[32m- max of non-positive numbers[0m[0m
+[0m[[0minfo[0m] [0m[32m- max of same number[0m[0m
+[0m[[0minfo[0m] [0m[32m- max with multiple same entries[0m[0m
