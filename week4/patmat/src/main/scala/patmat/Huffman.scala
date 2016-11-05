@@ -18,7 +18,7 @@ object Huffman {
    * present in the leaves below it. The weight of a `Fork` node is the sum of the weights of these
    * leaves.
    */
-    abstract class CodeTree
+  abstract class CodeTree
   case class Fork(left: CodeTree, right: CodeTree, chars: List[Char], weight: Int) extends CodeTree
   case class Leaf(char: Char, weight: Int) extends CodeTree
   
@@ -27,21 +27,19 @@ object Huffman {
   // if the tree is a fork, return the sum of its parts
   // otherwise return the value of the leaf
     def weight(tree: CodeTree): Int = tree match {
-      case tree: Fork => weight(tree.left) + weight(tree.right)
+      case tree: Fork => tree.weight
       case tree: Leaf => tree.weight
     }
 
   // if the tree is a fork, return the concatenation of the two sub-lists
   // otherwise if the tree is a leaf, return a list with one element: the character
     def chars(tree: CodeTree): List[Char] = tree match {
-      case tree: Fork => chars(tree.left) ::: chars(tree.right)
+      case tree: Fork => tree.chars
       case tree: Leaf => List(tree.char)
     }
   
   def makeCodeTree(left: CodeTree, right: CodeTree) =
     Fork(left, right, chars(left) ::: chars(right), weight(left) + weight(right))
-
-
 
   // Part 2: Generating Huffman trees
 
@@ -79,7 +77,9 @@ object Huffman {
    *       println("integer is  : "+ theInt)
    *   }
    */
-    def times(chars: List[Char]): List[(Char, Int)] = chars.map(x => (x, chars.count(_ == x)))
+    def times(chars: List[Char]): List[(Char, Int)] = {
+      chars.groupBy(identity).mapValues(_.size).toList
+    }
   
   /**
    * Returns a list of `Leaf` nodes for a given frequency table `freqs`.
@@ -110,9 +110,8 @@ object Huffman {
    * unchanged.
    */
     def combine(trees: List[CodeTree]): List[CodeTree] = trees match {
-      case _ :: Nil => trees
-      case t1 :: t2 :: Nil => List(makeCodeTree(t1, t2))
-      case t1 :: t2 :: ts => (makeCodeTree(t1, t2) :: ts).sortWith((le, r) => weight(le) < weight(r))
+      case t1 :: t2 :: ts => (makeCodeTree(t1, t2) :: ts).sortWith((t1, t2) => weight(t1) < weight(t2))
+      case _ => trees
     }
   
   /**
@@ -194,9 +193,9 @@ object Huffman {
    */
     def encode(tree: CodeTree)(text: List[Char]): List[Bit] = {
       //println("text: ",text, "tree: ", tree)
-      def encodeChar(tree: CodeTree)(c: Char) = tree match {
+      def encodeChar(tree: CodeTree)(c: Char): List[Bit] = tree match {
         case tree: Leaf => List()
-        case tree: Fork => if (chars(tree.left).contains(c)) 0 :: encode(tree.left)(text) else 1 :: encode(tree.right)(text)
+        case tree: Fork => if (chars(tree.left).contains(c)) 0 :: encodeChar(tree.left)(c) else 1 :: encodeChar(tree.right)(c)
       }
       text.flatMap(encodeChar(tree))
     }
@@ -250,3 +249,9 @@ object Huffman {
       text.flatMap(codeBits(table))
     }
   }
+
+object Main extends App {
+  import Huffman._
+
+  println(decodedSecret)
+}

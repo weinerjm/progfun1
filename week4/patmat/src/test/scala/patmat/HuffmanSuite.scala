@@ -22,6 +22,11 @@ class HuffmanSuite extends FunSuite {
   }
 
 
+  test("times") {
+    assert(times(List('c','c','a','a')) === List(('a',2),('c',2)))
+    assert(times(string2Chars("aaaaabbbbrrrkkd")) === List(('a',5), ('b',4), ('r',3), ('k',2), ('d',1)))
+  }
+
   test("chars of a larger tree") {
     new TestTrees {
       assert(chars(t2) === List('a','b','d'))
@@ -51,10 +56,24 @@ class HuffmanSuite extends FunSuite {
   }
   }
 
+  test("encoding and decoding with frenchCode") {
+    val testChars = string2Chars("huffmanestcool")
+    //println(encode(frenchCode)(testChars))
+    assert(decode(frenchCode, encode(frenchCode)(testChars)) === testChars)
+    assert(encode(frenchCode)(testChars) === secret)
+  }
+
   test("decode and encode a very short text should be identity") {
     new TestTrees {
       assert(decode(t1, encode(t1)("ab".toList)) === "ab".toList)
+      assert(decode(t1, encode(t1)("aaabbb".toList)) === "aaabbb".toList)
     }
   }
+
+  /*test("encode some text with frenchCode") {
+    new TestTrees {
+      assert()
+    }
+  }*/
 
 }
